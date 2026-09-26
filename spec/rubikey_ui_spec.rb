@@ -40,7 +40,25 @@ RSpec.describe Rubikey do
       password_manager = instance_double(PasswordManager, close: nil)
       Rubikey.instance_variable_set(:@password_manager, password_manager)
       allow(Rubikey::Terminal).to receive(:prompt).and_return('2', 'q')
-      expect(Rubikey).to receive(:show_passwords)#.with(anything)
+      expect(Rubikey).to receive(:show_passwords).with(any_args)
+
+      Rubikey.main_menu
+    end
+
+    it 'opens the search list when option 3 is selected and a search input is given' do
+      password_manager = instance_double(PasswordManager, close: nil)
+      Rubikey.instance_variable_set(:@password_manager, password_manager)
+      allow(Rubikey::Terminal).to receive(:prompt).and_return('2', 'google', 'q')
+      expect(Rubikey).to receive(:show_passwords).with(any_args)
+
+      Rubikey.main_menu
+    end
+
+    it 'opens the options when option 4 is selected' do
+      password_manager = instance_double(PasswordManager, close: nil)
+      Rubikey.instance_variable_set(:@password_manager, password_manager)
+      allow(Rubikey::Terminal).to receive(:prompt).and_return('4', 'q')
+      expect(Rubikey).to receive(:options)#.with(anything)
 
       Rubikey.main_menu
     end
@@ -117,6 +135,17 @@ RSpec.describe Rubikey do
         [Rubikey::TextColor::WHITE + 'Password: ', Rubikey::TextColor::BLUE + 'secret']
       )
     end
+  end
+
+  describe '.change_master_password' do
+    it '' do
+      password_manager = PasswordManager.new(master_password: 'masterPassword', new_password: true)
+      Rubikey.instance_variable_set(:@password_manager, password_manager)
+      password = Password.new(website: 'example.com', username: 'alice')
+      password.update_password('secret', 'masterPassword')
+      password_manager.add_password(password)
+    end
+
   end
 
   describe '.first_timer' do
