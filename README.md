@@ -1,7 +1,7 @@
 # Rubikey
 Text based local password manager built in Ruby allowing for secure password generation and storage.
 
-* https://github.com/wtweberAggie/Rubikey/tree/main
+* https://github.com/wtweber/Rubikey/tree/main
 
 ## How to install `Rubikey`
 * bundle install

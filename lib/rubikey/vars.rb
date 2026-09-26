@@ -8,6 +8,8 @@ module Rubikey
     RED = "\e[31m"
     GREEN = "\e[32m"
     YELLOW = "\e[33m"
+    BLUE = "\e[34m"
+    WHITE = "\e[37m"
 
     BOLD = "\e[1m"
     UNDERLINE = "\e[4m"
