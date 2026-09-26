@@ -40,7 +40,7 @@ RSpec.describe Rubikey do
       password_manager = instance_double(PasswordManager, close: nil)
       Rubikey.instance_variable_set(:@password_manager, password_manager)
       allow(Rubikey::Terminal).to receive(:prompt).and_return('2', 'q')
-      expect(Rubikey).to receive(:show_passwords)
+      expect(Rubikey).to receive(:show_passwords)#.with(anything)
 
       Rubikey.main_menu
     end
@@ -96,7 +96,7 @@ RSpec.describe Rubikey do
       password_manager.add_password(password)
       allow(Rubikey::Terminal).to receive(:prompt).and_return(password.id.to_s, 'q')
 
-      expect { Rubikey.show_passwords }.to output(
+      expect { Rubikey.show_passwords(password_manager.all_passwords) }.to output(
         a_string_including('example.com', 'alice', 'Password: ', 'secret')
       ).to_stdout
     ensure
@@ -107,7 +107,7 @@ RSpec.describe Rubikey do
       password_manager = PasswordManager.new(master_password: 'masterPassword', new_password: true)
       Rubikey.instance_variable_set(:@password_manager, password_manager)
 
-      expect(Rubikey.show_passwords).to eq(Rubikey::Dialogue.no_passwords_saved)
+      expect(Rubikey.show_passwords(password_manager.all_passwords)).to eq(Rubikey::Dialogue.no_passwords_saved)
     ensure
       password_manager&.close
     end
@@ -158,7 +158,7 @@ RSpec.describe Rubikey do
         password_manager = Rubikey.first_timer
         password_manager.close
       end.to output(
-        a_string_including('Passwords do not match. Please try again.')
+        a_string_including('Password does not match. Please try again.')
       ).to_stdout
 
       expect(MasterPassword.set?).to be true

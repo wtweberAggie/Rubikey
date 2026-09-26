@@ -41,7 +41,7 @@ module Rubikey
 
     def self.passwords_do_not_match
       [
-        TextColor::RED + "\nPassword do not match. Please try again.\n"
+        TextColor::RED + "\nPassword does not match. Please try again.\n"
       ]
     end
 

@@ -36,10 +36,6 @@ class Password
     new(website: row[1], username: row[2], enc_password: row[3], id: row[0])
   end
 
-  def self.auto_generate
-    
-  end
-
   def website=(new_website)
     raise ArgumentError, 'Website can not be empty' if new_website.empty?
 

@@ -71,7 +71,7 @@ module Rubikey
       when '4'
         menu_message = options
       when 'q'
-        Terminal.clear
+        #Terminal.clear
         @password_manager.close
         break
       else
