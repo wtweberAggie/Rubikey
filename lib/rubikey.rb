@@ -13,6 +13,7 @@ require_relative 'rubikey/passwordmanager'
 # This class handles the main menu and calls upon the PasswordManager class for password-related work.
 module Rubikey
   def self.run
+    Terminal.clear
     Terminal.output(*Dialogue.welcome_message)
 
     # If this is the first time booting then prompt for new password

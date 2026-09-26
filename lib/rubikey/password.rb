@@ -89,5 +89,3 @@ class Password
     set
   end
 end
-
-print Password.generate(22, symbols: false)
