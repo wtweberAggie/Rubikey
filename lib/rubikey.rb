@@ -34,12 +34,10 @@ module Rubikey
   def self.first_time_loop
     loop do
       master_password = Terminal.password_prompt(*Dialogue.create_master_password_prompt)
-
       master_password_confirm = Terminal.password_prompt(*Dialogue.confirm_master_password_prompt)
 
-      return master_password if master_password == master_password_confirm
-
-      Terminal.output(*Dialogue.passwords_do_not_match)
+      return master_password if master_password == master_password_confirm && !master_password.empty?
+      master_password.empty? ? Terminal.output(*Dialogue.cant_be_empty) : Terminal.output(*Dialogue.passwords_do_not_match)
     end
   end
 

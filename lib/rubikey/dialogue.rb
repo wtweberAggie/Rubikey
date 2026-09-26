@@ -103,6 +103,10 @@ module Rubikey
       ]
     end
 
+    def self.cant_be_empty
+      [ TextColor::BOLD + TextColor::RED + "\nThis cannot be empty.\n",]
+    end
+
     def self.password_list_header
       [
         TextColor::GREEN + "\nSaved passwords\n"
