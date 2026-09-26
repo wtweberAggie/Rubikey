@@ -13,6 +13,7 @@ require_relative 'rubikey/passwordmanager'
 # This class handles the main menu and calls upon the PasswordManager class for password-related work.
 module Rubikey
   def self.run
+    Terminal.clear
     Terminal.output(*Dialogue.welcome_message)
 
     # If this is the first time booting then prompt for new password
@@ -34,12 +35,10 @@ module Rubikey
   def self.first_time_loop
     loop do
       master_password = Terminal.password_prompt(*Dialogue.create_master_password_prompt)
-
       master_password_confirm = Terminal.password_prompt(*Dialogue.confirm_master_password_prompt)
 
-      return master_password if master_password == master_password_confirm
-
-      Terminal.output(*Dialogue.passwords_do_not_match)
+      return master_password if master_password == master_password_confirm && !master_password.empty?
+      master_password.empty? ? Terminal.output(*Dialogue.cant_be_empty) : Terminal.output(*Dialogue.passwords_do_not_match)
     end
   end
 
@@ -89,8 +88,8 @@ module Rubikey
   def self.new_password
     website = Terminal.prompt(*Dialogue.new_password_website)
     username = Terminal.prompt(*Dialogue.ask_username)
-    password_value = Terminal.password_prompt(*Dialogue.ask_password)
-
+    password_value = ['yes', 'y'].include?(Terminal.prompt(*Dialogue.ask_auto).downcase) ? Password.generate : Terminal.password_prompt(*Dialogue.ask_password)
+    
     # Store password as a Password Class
     password = Password.new(website: website, username: username)
     password.update_password(password_value, @password_manager.master_password.password)

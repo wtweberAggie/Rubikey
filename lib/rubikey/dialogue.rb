@@ -91,10 +91,20 @@ module Rubikey
       ]
     end
 
+    def self.ask_auto
+      [
+        TextColor::YELLOW + TextColor::BOLD + 'Use strong password?(Y/N)'
+      ]
+    end
+
     def self.ask_password
       [
         TextColor::YELLOW + TextColor::BOLD + 'Enter the password:'
       ]
+    end
+
+    def self.cant_be_empty
+      [ TextColor::BOLD + TextColor::RED + "\nThis cannot be empty.\n",]
     end
 
     def self.password_list_header
