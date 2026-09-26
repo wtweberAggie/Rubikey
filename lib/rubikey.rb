@@ -66,13 +66,14 @@ module Rubikey
         menu_message = new_password
       when '2'
         menu_message = show_passwords(@password_manager.all_passwords)
-      when 'q'
-        @password_manager.close
-        break
       when '3'
         menu_message = show_passwords(@password_manager.get_passwords_for(search_site))
       when '4'
-        menu_message = Dialogue.option_not_available
+        menu_message = options
+      when 'q'
+        Terminal.clear
+        @password_manager.close
+        break
       else
         menu_message = Dialogue.invalid_option
       end
@@ -119,5 +120,47 @@ module Rubikey
   end
   def self.search_site
     Terminal.prompt(*Dialogue.search_prompt)
+  end
+  def self.options
+    opt_message = nil
+    loop do
+      Terminal.clear
+      Terminal.output(*opt_message) if opt_message
+      opt_message = nil
+      selection = Terminal.prompt(*Dialogue.opt_menu).downcase
+
+      case selection
+      when '1'
+        opt_message = change_master_password
+      when 'q'
+        Terminal.clear
+        return
+      else
+        opt_message = Dialogue.invalid_option
+      end
+    end
+  end
+  def self.change_master_password
+    master = check_master_password_loop
+    return if master.nil?
+    password = new_password_loop
+    @password_manager.change_master_password(master, password)
+    return
+  end
+  def self.check_master_password_loop
+    loop do
+      master_password = Terminal.password_prompt(*Dialogue.enter_master_password_prompt)
+      break if master_password == 'q'
+      return master_password if @password_manager.master_password.auth(master_password)
+      Terminal.output(*Dialogue.passwords_do_not_match)
+    end
+  end
+  def self.new_password_loop
+    loop do
+      p_1 = Terminal.password_prompt(*Dialogue.create_master_password_prompt)
+      p_2 = Terminal.password_prompt(*Dialogue.confirm_master_password_prompt)
+      return p_1 if p_1 == p_2
+      Terminal.output(*Dialogue.passwords_do_not_match)
+    end
   end
 end

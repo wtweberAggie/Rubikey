@@ -28,20 +28,20 @@ module Rubikey
     def self.create_master_password_prompt
       [
         TextColor::GREEN + 'Create a new ',
-        TextColor::YELLOW + TextColor::BOLD + 'master password:'
+        TextColor::YELLOW + TextColor::BOLD + 'password:'
       ]
     end
 
     def self.confirm_master_password_prompt
       [
         TextColor::GREEN + 'Confirm the new ',
-        TextColor::YELLOW + TextColor::BOLD + 'master password:'
+        TextColor::YELLOW + TextColor::BOLD + 'password:'
       ]
     end
 
     def self.passwords_do_not_match
       [
-        TextColor::RED + "\nPasswords do not match. Please try again.\n"
+        TextColor::RED + "\nPassword do not match. Please try again.\n"
       ]
     end
 
@@ -140,6 +140,14 @@ module Rubikey
     def self.search_prompt
       [
         TextColor::YELLOW + TextColor::BOLD + 'Search for site:'
+      ]
+    end
+    def self.opt_menu
+      [
+        TextColor::YELLOW + "\nOptions menu\n",
+        TextColor::GREEN + "1. Change master password\n",
+        TextColor::RED + "q. Return to main menu\n\n",
+        TextColor::YELLOW + TextColor::BOLD + 'Select an option:'
       ]
     end
   end
