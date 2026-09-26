@@ -71,22 +71,23 @@ class Password
     # enforce minimum length
     length = [8, len].max
 
-    # build character set baised on option 
+    # build character set baised on option
     char_set = char_set(options)
 
     # Generate random array of length
     Array.new(length) { char_set.sample(random: SecureRandom) }.join
-
   end
 
   def self.char_set(options = {})
+    available_symbols = options[:available_symbols] || %w[! " ' # $ % & ( ) * + , - . / : ; < = > ? ` ~ { | } @ ^]
+
     set = []
     set += ('a'..'z').to_a if options[:lowercase].nil? || options[:lowercase]
     set += ('A'..'Z').to_a if options[:uppercase].nil? || options[:uppercase]
     set += ('0'..'9').to_a if options[:numbers].nil? || options[:numbers]
-    
-    # Set symbols to all or provided set from options
-    available_symbols = options[:available_symbols] || %w[! " ' # $ % & ( ) * + , - . / : ; < = > ? ` ~ { | } @ ^]
     set += available_symbols.to_a if options[:symbols].nil? || options[:symbols]
+    set
   end
 end
+
+print Password.generate(22, symbols: false)
