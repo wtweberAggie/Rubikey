@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'cipher'
+require 'securerandom'
 
 # Stores website info and encrypts passwords using a master master password for later decryption.
 class Password
@@ -63,5 +64,29 @@ class Password
   # Decrypt stored pasword data using master password
   def get_password(master_password)
     PasswordCipher.decrypt(@enc_password, master_password)
+  end
+
+  # Geneerate a random password
+  def self.generate(len = 12, options = {})
+    # enforce minimum length
+    length = [8, len].max
+
+    # build character set baised on option 
+    char_set = char_set(options)
+
+    # Generate random array of length
+    Array.new(length) { char_set.sample(random: SecureRandom) }.join
+
+  end
+
+  def self.char_set(options = {})
+    set = []
+    set += ('a'..'z').to_a if options[:lowercase].nil? || options[:lowercase]
+    set += ('A'..'Z').to_a if options[:uppercase].nil? || options[:uppercase]
+    set += ('0'..'9').to_a if options[:numbers].nil? || options[:numbers]
+    
+    # Set symbols to all or provided set from options
+    available_symbols = options[:available_symbols] || %w[! " ' # $ % & ( ) * + , - . / : ; < = > ? ` ~ { | } @ ^]
+    set += available_symbols.to_a if options[:symbols].nil? || options[:symbols]
   end
 end
