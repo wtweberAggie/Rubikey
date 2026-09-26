@@ -89,8 +89,8 @@ module Rubikey
   def self.new_password
     website = Terminal.prompt(*Dialogue.new_password_website)
     username = Terminal.prompt(*Dialogue.ask_username)
-    password_value = Terminal.password_prompt(*Dialogue.ask_password)
-
+    password_value = ['yes', 'y'].include?(Terminal.prompt(*Dialogue.ask_auto).downcase) ? Password.generate : Terminal.password_prompt(*Dialogue.ask_password)
+    
     # Store password as a Password Class
     password = Password.new(website: website, username: username)
     password.update_password(password_value, @password_manager.master_password.password)
